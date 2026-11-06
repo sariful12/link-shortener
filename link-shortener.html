@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Link Shortener — Free Unlimited Short Links</title>
+    <meta name="description" content="Free unlimited link shortener by Md Sariful Islam. Paste any long URL and get a short is.gd link instantly — no sign-up, custom short names, and every shorten creates a unique link." />
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:title" content="Link Shortener — Free Unlimited Short Links" />
+    <meta property="og:description" content="Free unlimited link shortener. Paste any long URL and get a short is.gd link instantly — no sign-up, custom short names, and every shorten creates a unique link." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Link Shortener" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Link Shortener — Free Unlimited Short Links" />
+    <meta name="twitter:description" content="Free unlimited link shortener. Paste any long URL and get a short is.gd link instantly — no sign-up, custom short names, and every shorten creates a unique link." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #eef2f0;
+        --surface: #ffffff;
+        --surface-2: #e3eae6;
+        --ink: #12211b;
+        --ink-soft: #47605599;
+        --ink-mid: #3d554a;
+        --line: #12211b22;
+        --accent: #0a7d5c;
+        --accent-strong: #065f46;
+        --accent-soft: #0a7d5c1a;
+        --danger: #b3261e;
+        --danger-soft: #b3261e14;
+        --shadow: 0 18px 44px -18px rgba(18, 33, 27, .28);
+        --radius: 14px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0b120f;
+          --surface: #141d18;
+          --surface-2: #1c2821;
+          --ink: #e8f1ec;
+          --ink-soft: #9db8ab99;
+          --ink-mid: #a9c2b5;
+          --line: #e8f1ec22;
+          --accent: #2fbd8f;
+          --accent-strong: #57d3a9;
+          --accent-soft: #2fbd8f1f;
+          --danger: #ff8a80;
+          --danger-soft: #ff8a8017;
+          --shadow: 0 18px 44px -18px rgba(0, 0, 0, .6);
+        }
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        min-height: 100vh;
+      }
+      .wrap {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 40px 20px 64px;
+      }
+      header { margin-bottom: 28px; }
+      .mark {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        letter-spacing: -.01em;
+        font-size: 15px;
+        text-transform: uppercase;
+      }
+      .mark .badge {
+        width: 34px; height: 34px;
+        border-radius: 9px;
+        background: var(--accent);
+        display: grid; place-items: center;
+        color: #fff;
+        flex: none;
+      }
+      .mark .badge svg { width: 19px; height: 19px; }
+      h1 {
+        font-size: clamp(34px, 7vw, 52px);
+        line-height: 1.04;
+        letter-spacing: -.03em;
+        font-weight: 800;
+        margin: 22px 0 10px;
+      }
+      h1 .thin { color: var(--accent); }
+      .sub {
+        font-size: 16.5px;
+        line-height: 1.55;
+        color: var(--ink-mid);
+        margin: 0;
+        max-width: 52ch;
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 22px;
+        margin-top: 26px;
+      }
+      label.field-label {
+        display: block;
+        font-size: 12.5px;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: var(--ink-mid);
+        margin-bottom: 8px;
+      }
+      .url-row { display: flex; gap: 10px; }
+      .input-shell {
+        flex: 1 1 auto;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--surface-2);
+        border: 1.5px solid transparent;
+        border-radius: 10px;
+        padding: 0 6px 0 14px;
+        min-width: 0;
+        transition: border-color .15s ease, background .15s ease;
+      }
+      .input-shell:focus-within {
+        border-color: var(--accent);
+        background: var(--surface);
+      }
+      .input-shell svg { width: 17px; height: 17px; color: var(--ink-soft); flex: none; }
+      input[type="url"], input[type="text"] {
+        flex: 1 1 auto;
+        min-width: 0;
+        border: 0;
+        background: transparent;
+        color: var(--ink);
+        font: inherit;
+        font-size: 15.5px;
+        padding: 13px 0;
+        outline: none;
+      }
+      input::placeholder { color: var(--ink-soft); }
+      .paste-btn {
+        flex: none;
+        border: 0;
+        background: transparent;
+        color: var(--accent-strong);
+        font: inherit;
+        font-size: 13.5px;
+        font-weight: 700;
+        padding: 8px 10px;
+        border-radius: 7px;
+        cursor: pointer;
+      }
+      .paste-btn:hover { background: var(--accent-soft); }
+      .alias-row {
+        display: flex;
+        align-items: center;
+        background: var(--surface-2);
+        border: 1.5px solid transparent;
+        border-radius: 10px;
+        padding: 0 14px;
+        transition: border-color .15s ease, background .15s ease;
+      }
+      .alias-row:focus-within { border-color: var(--accent); background: var(--surface); }
+      .alias-prefix {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 14.5px;
+        color: var(--ink-soft);
+        flex: none;
+      }
+      .alias-row input {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 14.5px;
+      }
+      .alias-note { font-size: 12.5px; color: var(--ink-soft); margin: 7px 2px 0; }
+      .shorten-btn {
+        margin-top: 18px;
+        width: 100%;
+        border: 0;
+        border-radius: 10px;
+        background: var(--accent);
+        color: #fff;
+        font: inherit;
+        font-size: 16.5px;
+        font-weight: 700;
+        padding: 15px 18px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        transition: background .15s ease, transform .1s ease;
+      }
+      .shorten-btn:hover { background: var(--accent-strong); }
+      .shorten-btn:active { transform: scale(.99); }
+      .shorten-btn:disabled { opacity: .65; cursor: wait; }
+      .shorten-btn svg { width: 18px; height: 18px; }
+      .spinner {
+        width: 17px; height: 17px;
+        border: 2.5px solid rgba(255,255,255,.35);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin .7s linear infinite;
+        flex: none;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      @media (prefers-reduced-motion: reduce) {
+        .spinner { animation-duration: 2s; }
+        * { transition: none !important; }
+      }
+      .error {
+        display: none;
+        margin-top: 16px;
+        background: var(--danger-soft);
+        color: var(--danger);
+        border: 1px solid var(--danger);
+        border-radius: 10px;
+        padding: 12px 14px;
+        font-size: 14.5px;
+        line-height: 1.5;
+      }
+      .error.show { display: block; }
+
+      /* Result */
+      .result { display: none; margin-top: 26px; }
+      .result.show { display: block; }
+      .result-head {
+        display: flex; align-items: center; gap: 8px;
+        font-size: 12.5px; font-weight: 700;
+        letter-spacing: .06em; text-transform: uppercase;
+        color: var(--accent-strong);
+        margin-bottom: 12px;
+      }
+      .result-head svg { width: 16px; height: 16px; }
+      .short-link {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: clamp(19px, 4.6vw, 25px);
+        font-weight: 600;
+        color: var(--accent-strong);
+        text-decoration: none;
+        word-break: break-all;
+        line-height: 1.3;
+      }
+      .short-link:hover { text-decoration: underline; }
+      .long-link {
+        margin-top: 8px;
+        font-size: 13.5px;
+        color: var(--ink-soft);
+        word-break: break-all;
+        line-height: 1.5;
+      }
+      .result-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
+      .btn {
+        border: 1.5px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        font: inherit;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 10px 15px;
+        border-radius: 9px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        text-decoration: none;
+        transition: border-color .15s ease, background .15s ease;
+      }
+      .btn svg { width: 15px; height: 15px; }
+      .btn:hover { border-color: var(--accent); background: var(--accent-soft); }
+      .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+      .btn.primary:hover { background: var(--accent-strong); }
+      .btn.copied { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+      /* Dashboard */
+      .dashboard { margin-top: 38px; }
+      .dashboard h2 { font-size: 19px; font-weight: 800; letter-spacing: -.01em; margin: 0 0 12px; }
+      .stats { margin-bottom: 20px; }
+      .stat {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 16px 18px;
+      }
+      .stat .num {
+        font-size: 32px; font-weight: 800; letter-spacing: -.02em; line-height: 1;
+        font-variant-numeric: tabular-nums;
+      }
+      .stat .lbl { font-size: 13px; color: var(--ink-mid); font-weight: 600; margin-top: 6px; }
+      .empty-note {
+        border: 1.5px dashed var(--line);
+        border-radius: 12px;
+        padding: 22px 18px;
+        text-align: center;
+        color: var(--ink-soft);
+        font-size: 14.5px;
+        line-height: 1.55;
+      }
+      .history-list { display: flex; flex-direction: column; gap: 10px; }
+      .hist-item {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px 16px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .hist-text { flex: 1 1 auto; min-width: 0; }
+      .hist-short {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 15.5px; font-weight: 600;
+        color: var(--accent-strong);
+        text-decoration: none;
+        word-break: break-all;
+      }
+      .hist-short:hover { text-decoration: underline; }
+      .hist-long {
+        font-size: 12.5px; color: var(--ink-soft);
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        margin-top: 3px;
+      }
+      .hist-meta { margin-top: 9px; }
+      .chip {
+        display: inline-flex; align-items: center; gap: 5px;
+        font-size: 12px; font-weight: 600;
+        color: var(--ink-mid);
+        background: var(--surface-2);
+        border-radius: 999px;
+        padding: 4px 10px;
+      }
+      .chip svg { width: 12px; height: 12px; }
+      .icon-btn {
+        flex: none;
+        border: 1.5px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        height: 38px;
+        min-width: 38px;
+        padding: 0 12px;
+        border-radius: 9px;
+        display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+        cursor: pointer;
+        font: inherit; font-size: 12.5px; font-weight: 700;
+      }
+      .icon-btn svg { width: 16px; height: 16px; }
+      .icon-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
+      .icon-btn.copied { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+      /* Notes */
+      .notes {
+        margin-top: 44px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .note {
+        border-top: 2.5px solid var(--accent);
+        padding-top: 12px;
+      }
+      .note h3 { font-size: 14.5px; font-weight: 700; margin: 0 0 5px; }
+      .note p { font-size: 13.5px; line-height: 1.55; color: var(--ink-mid); margin: 0; }
+      /* Developer */
+      .developer {
+        margin-top: 44px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 22px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .developer .avatar {
+        width: 52px; height: 52px;
+        border-radius: 50%;
+        background: var(--accent);
+        color: #fff;
+        display: grid; place-items: center;
+        font-weight: 800;
+        font-size: 18px;
+        letter-spacing: .02em;
+        flex: none;
+      }
+      .developer .dev-label {
+        font-size: 11.5px;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: var(--accent-strong);
+        margin-bottom: 4px;
+      }
+      .developer .dev-name {
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: -.01em;
+        line-height: 1.15;
+        color: var(--ink);
+      }
+      .developer .dev-role {
+        font-size: 14px;
+        color: var(--ink-mid);
+        font-weight: 600;
+        margin-top: 3px;
+        line-height: 1.4;
+      }
+      footer {
+        margin-top: 28px;
+        font-size: 12.5px;
+        color: var(--ink-soft);
+        line-height: 1.6;
+      }
+      footer a { color: var(--accent-strong); }
+
+      @media (max-width: 560px) {
+        .wrap { padding: 28px 16px 52px; }
+        .card { padding: 18px 16px; }
+        .developer { padding: 18px 16px; }
+        .notes { grid-template-columns: 1fr; gap: 18px; }
+        .shorten-btn { font-size: 16px; }
+        .icon-btn .btn-text { display: none; }
+        .icon-btn { padding: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="mark">
+          <span class="badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </span>
+          Link Shortener
+        </div>
+        <h1>Long link in,<br /><span class="thin">short link out.</span></h1>
+        <p class="sub">Paste any long URL and get a real, working short link through the free is.gd service. No sign-up, no limit — shorten as many as you like. Every shorten creates a brand-new, unique short link, even for the same long URL.</p>
+      </header>
+
+      <section class="card" aria-label="Shorten a link">
+        <form id="shorten-form" novalidate>
+          <label class="field-label" for="long-url">Your long link</label>
+          <div class="url-row">
+            <div class="input-shell">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <input type="url" id="long-url" placeholder="https://example.com/a/very/long/link…" autocomplete="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" class="paste-btn" id="paste-btn">Paste</button>
+            </div>
+          </div>
+
+          <label class="field-label" for="alias" style="margin-top:18px;">Custom name <span style="text-transform:none; letter-spacing:0; font-weight:500;">(optional)</span></label>
+          <div class="alias-row">
+            <span class="alias-prefix">is.gd/</span>
+            <input type="text" id="alias" placeholder="myname" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="30" />
+          </div>
+          <p class="alias-note">Pick your own short name — if it is free, it becomes your link. If it is already taken, you will be asked to choose another. Leave empty and a fresh unique code is generated for you every time.</p>
+
+          <button type="submit" class="shorten-btn" id="shorten-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88"/><path d="m14.47 14.48 5.53 5.52"/><path d="M8.12 8.12 12 12"/></svg>
+            <span id="shorten-btn-text">Shorten link</span>
+          </button>
+
+          <div class="error" id="error-box" role="alert"></div>
+        </form>
+
+        <div class="result" id="result">
+          <div class="result-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            Your short link is ready
+          </div>
+          <a class="short-link" id="result-short" href="#" target="_blank" rel="noopener noreferrer"></a>
+          <div class="long-link" id="result-long"></div>
+          <div class="result-actions">
+            <button type="button" class="btn primary" id="copy-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span>Copy link</span>
+            </button>
+            <a class="btn" id="open-btn" href="#" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+              Open
+            </a>
+            <button type="button" class="btn" id="again-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+              Shorten another
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard" aria-label="Dashboard">
+        <h2>Dashboard</h2>
+        <div class="stats">
+          <div class="stat">
+            <div class="num" id="stat-total">0</div>
+            <div class="lbl">Total links shortened</div>
+          </div>
+        </div>
+        <div class="empty-note" id="empty-note">No links yet. Shorten your first link above and it will appear here with its date.</div>
+        <div class="history-list" id="history-list"></div>
+      </section>
+
+      <div class="notes">
+        <div class="note">
+          <h3>Real is.gd links</h3>
+          <p>Every short link is created live by is.gd, so it opens on any phone or computer — not just here.</p>
+        </div>
+        <div class="note">
+          <h3>Always unique</h3>
+          <p>Shorten the same long link twice and you get two different short links — a fresh code is generated every time.</p>
+        </div>
+        <div class="note">
+          <h3>Links stay live</h3>
+          <p>Short links are stored by is.gd itself, so they keep working after you close this page.</p>
+        </div>
+      </div>
+
+      <section class="developer" aria-label="Website development">
+        <div class="avatar" aria-hidden="true">MS</div>
+        <div>
+          <div class="dev-label">Website Development</div>
+          <div class="dev-name">Md Sariful Islam</div>
+          <div class="dev-role">Diploma in Computer Engineer</div>
+        </div>
+      </section>
+
+      <footer>
+        Developed by Md Sariful Islam — Diploma in Computer Engineer.<br />
+        Short links are created with the free <a href="https://is.gd" target="_blank" rel="noopener noreferrer">is.gd</a> API. Your link history is saved in this browser only.
+      </footer>
+    </div>
+
+    <script>
+      (function () {
+        var STORAGE_KEY = 'link-shortener-history-v1';
+
+        var form = document.getElementById('shorten-form');
+        var urlInput = document.getElementById('long-url');
+        var aliasInput = document.getElementById('alias');
+        var pasteBtn = document.getElementById('paste-btn');
+        var shortenBtn = document.getElementById('shorten-btn');
+        var shortenBtnText = document.getElementById('shorten-btn-text');
+        var errorBox = document.getElementById('error-box');
+        var result = document.getElementById('result');
+        var resultShort = document.getElementById('result-short');
+        var resultLong = document.getElementById('result-long');
+        var copyBtn = document.getElementById('copy-btn');
+        var openBtn = document.getElementById('open-btn');
+        var againBtn = document.getElementById('again-btn');
+        var statTotal = document.getElementById('stat-total');
+        var emptyNote = document.getElementById('empty-note');
+        var historyList = document.getElementById('history-list');
+
+        var busy = false;
+        var currentShort = '';
+
+        /* ---------- storage ---------- */
+        function loadHistory() {
+          try {
+            var raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return [];
+            var parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) return [];
+            var seen = {};
+            var out = [];
+            parsed.forEach(function (e) {
+              if (!e || typeof e.short !== 'string' || typeof e.long !== 'string') return;
+              if (seen[e.short]) return; // never keep duplicate short links
+              seen[e.short] = true;
+              out.push({
+                short: e.short,
+                long: e.long,
+                date: typeof e.date === 'number' ? e.date : Date.now()
+              });
+            });
+            return out;
+          } catch (err) { return []; }
+        }
+        function saveHistory() {
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(history)); } catch (err) {}
+        }
+        var history = loadHistory();
+
+        /* ---------- helpers ---------- */
+        function showError(msg) {
+          errorBox.textContent = msg;
+          errorBox.classList.add('show');
+        }
+        function hideError() {
+          errorBox.textContent = '';
+          errorBox.classList.remove('show');
+        }
+        function normaliseUrl(raw) {
+          var v = (raw || '').trim();
+          if (!v) return null;
+          if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(v)) {
+            if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(v)) {
+              v = 'https://' + v;
+            }
+          }
+          try {
+            var u = new URL(v);
+            if (u.protocol !== 'http:' && u.protocol !== 'https:') return null;
+            if (!u.hostname || u.hostname.indexOf('.') === -1) return null;
+            return u.href;
+          } catch (e) { return null; }
+        }
+        function validAlias(a) { return /^[A-Za-z0-9_-]{5,30}$/.test(a); }
+
+        var ALIAS_CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        function randomAlias() {
+          // A random custom alias forces is.gd to mint a brand-new short link,
+          // so shortening the same long URL twice never returns the same code.
+          var len = 7;
+          var out = '';
+          if (window.crypto && window.crypto.getRandomValues) {
+            var buf = new Uint32Array(len);
+            window.crypto.getRandomValues(buf);
+            for (var i = 0; i < len; i++) out += ALIAS_CHARS[buf[i] % ALIAS_CHARS.length];
+          } else {
+            for (var j = 0; j < len; j++) out += ALIAS_CHARS[Math.floor(Math.random() * ALIAS_CHARS.length)];
+          }
+          return out;
+        }
+        function isTakenError(msg) {
+          return /already|taken|in use|exists|not available|unavailable/i.test(msg || '');
+        }
+        function alreadyInHistory(shortUrl) {
+          for (var i = 0; i < history.length; i++) {
+            if (history[i].short === shortUrl) return true;
+          }
+          return false;
+        }
+
+        function copyText(text, btn, labelEl) {
+          function done() {
+            if (!btn) return;
+            btn.classList.add('copied');
+            var original = labelEl ? labelEl.textContent : null;
+            if (labelEl) labelEl.textContent = 'Copied!';
+            setTimeout(function () {
+              btn.classList.remove('copied');
+              if (labelEl && original) labelEl.textContent = original;
+            }, 1600);
+          }
+          function fallback() {
+            var ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); done(); } catch (e) {}
+            document.body.removeChild(ta);
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done, fallback);
+          } else { fallback(); }
+        }
+
+        function formatDate(ts) {
+          try {
+            return new Date(ts).toLocaleDateString(undefined, {
+              day: 'numeric', month: 'short', year: 'numeric'
+            });
+          } catch (e) { return ''; }
+        }
+
+        /* ---------- dashboard / history rendering ---------- */
+        var ICON_COPY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+        var ICON_CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>';
+
+        function renderDashboard() {
+          statTotal.textContent = history.length;
+          emptyNote.style.display = history.length ? 'none' : 'block';
+          historyList.innerHTML = '';
+
+          history.forEach(function (entry) {
+            var item = document.createElement('div');
+            item.className = 'hist-item';
+
+            var textWrap = document.createElement('div');
+            textWrap.className = 'hist-text';
+            var a = document.createElement('a');
+            a.className = 'hist-short';
+            a.href = entry.short;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.textContent = entry.short.replace(/^https?:\/\//, '');
+            var long = document.createElement('div');
+            long.className = 'hist-long';
+            long.textContent = entry.long;
+            long.title = entry.long;
+            var meta = document.createElement('div');
+            meta.className = 'hist-meta';
+            var dateChip = document.createElement('span');
+            dateChip.className = 'chip';
+            dateChip.innerHTML = ICON_CAL + '<span></span>';
+            dateChip.querySelector('span').textContent = formatDate(entry.date);
+            meta.appendChild(dateChip);
+            textWrap.appendChild(a);
+            textWrap.appendChild(long);
+            textWrap.appendChild(meta);
+
+            var copyButton = document.createElement('button');
+            copyButton.type = 'button';
+            copyButton.className = 'icon-btn';
+            copyButton.setAttribute('aria-label', 'Copy ' + entry.short);
+            copyButton.innerHTML = ICON_COPY + '<span class="btn-text">Copy</span>';
+            copyButton.addEventListener('click', function () {
+              copyText(entry.short, copyButton, copyButton.querySelector('.btn-text'));
+            });
+
+            item.appendChild(textWrap);
+            item.appendChild(copyButton);
+            historyList.appendChild(item);
+          });
+        }
+
+        function addToHistory(shortUrl, longUrl) {
+          if (alreadyInHistory(shortUrl)) return; // history never shows duplicates
+          history.unshift({ short: shortUrl, long: longUrl, date: Date.now() });
+          saveHistory();
+          renderDashboard();
+        }
+
+        /* ---------- result panel ---------- */
+        function showResult(shortUrl, longUrl) {
+          currentShort = shortUrl;
+          resultShort.href = shortUrl;
+          resultShort.textContent = shortUrl;
+          resultLong.textContent = '→ ' + longUrl;
+          openBtn.href = shortUrl;
+          result.classList.add('show');
+          result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        /* ---------- shortening ---------- */
+        function setBusy(on) {
+          busy = on;
+          shortenBtn.disabled = on;
+          if (on) {
+            shortenBtnText.textContent = 'Shortening…';
+            var sp = document.createElement('span');
+            sp.className = 'spinner';
+            sp.id = 'btn-spinner';
+            shortenBtn.insertBefore(sp, shortenBtn.firstChild);
+          } else {
+            shortenBtnText.textContent = 'Shorten link';
+            var old = document.getElementById('btn-spinner');
+            if (old) old.remove();
+          }
+        }
+
+        function callIsGd(longUrl, alias) {
+          var api = 'https://is.gd/create.php?format=json&url=' + encodeURIComponent(longUrl) +
+            '&shorturl=' + encodeURIComponent(alias);
+          return fetch(api).then(function (r) { return r.json(); });
+        }
+
+        function createUnique(longUrl, attemptsLeft) {
+          var alias = randomAlias();
+          return callIsGd(longUrl, alias).then(function (data) {
+            if (data && data.shorturl) {
+              if (alreadyInHistory(data.shorturl) && attemptsLeft > 0) {
+                return createUnique(longUrl, attemptsLeft - 1);
+              }
+              return data.shorturl;
+            }
+            var msg = (data && data.errormessage) ? data.errormessage : '';
+            // Random alias collided with an existing one — just mint another.
+            if (isTakenError(msg) && attemptsLeft > 0) {
+              return createUnique(longUrl, attemptsLeft - 1);
+            }
+            throw new Error(msg || 'is.gd could not shorten that link. Please try again.');
+          });
+        }
+
+        form.addEventListener('submit', function (ev) {
+          ev.preventDefault();
+          if (busy) return;
+          hideError();
+
+          var longUrl = normaliseUrl(urlInput.value);
+          if (!longUrl) {
+            showError('That does not look like a valid link. Paste a full web address, e.g. https://example.com/page');
+            urlInput.focus();
+            return;
+          }
+          var alias = aliasInput.value.trim();
+          if (alias && !validAlias(alias)) {
+            showError('Custom name must be 5–30 characters and can only use letters, numbers, hyphens and underscores.');
+            aliasInput.focus();
+            return;
+          }
+
+          setBusy(true);
+
+          if (alias) {
+            // User-chosen name: use it if free, otherwise show a clear error.
+            callIsGd(longUrl, alias)
+              .then(function (data) {
+                setBusy(false);
+                if (data && data.shorturl) {
+                  addToHistory(data.shorturl, longUrl);
+                  showResult(data.shorturl, longUrl);
+                  return;
+                }
+                var msg = (data && data.errormessage) ? data.errormessage : '';
+                if (isTakenError(msg)) {
+                  result.classList.remove('show');
+                  showError('The name "is.gd/' + alias + '" is already taken. Please pick another custom name, or leave the custom name empty for a unique auto-generated link.');
+                  aliasInput.focus();
+                  aliasInput.select();
+                } else {
+                  showError(msg || 'is.gd could not shorten that link. Please try again.');
+                }
+              })
+              .catch(function () {
+                setBusy(false);
+                showError('Could not reach the is.gd service. Check your internet connection and try again.');
+              });
+          } else {
+            // No custom name: force a fresh unique code on every shorten.
+            createUnique(longUrl, 5)
+              .then(function (shortUrl) {
+                setBusy(false);
+                addToHistory(shortUrl, longUrl);
+                showResult(shortUrl, longUrl);
+              })
+              .catch(function (err) {
+                setBusy(false);
+                if (err && /Failed to fetch|NetworkError|Load failed/i.test(err.message || '')) {
+                  showError('Could not reach the is.gd service. Check your internet connection and try again.');
+                } else {
+                  showError((err && err.message) || 'is.gd could not shorten that link. Please try again.');
+                }
+              });
+          }
+        });
+
+        copyBtn.addEventListener('click', function () {
+          if (currentShort) copyText(currentShort, copyBtn, copyBtn.querySelector('span'));
+        });
+
+        againBtn.addEventListener('click', function () {
+          urlInput.value = '';
+          aliasInput.value = '';
+          result.classList.remove('show');
+          currentShort = '';
+          hideError();
+          urlInput.focus();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        pasteBtn.addEventListener('click', function () {
+          if (navigator.clipboard && navigator.clipboard.readText) {
+            navigator.clipboard.readText().then(function (t) {
+              if (t) { urlInput.value = t.trim(); hideError(); }
+            }).catch(function () { urlInput.focus(); });
+          } else {
+            urlInput.focus();
+          }
+        });
+
+        urlInput.addEventListener('input', hideError);
+        aliasInput.addEventListener('input', hideError);
+
+        renderDashboard();
+      })();
+    </script>
+  </body>
+</html>
